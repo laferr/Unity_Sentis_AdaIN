@@ -49,7 +49,21 @@ public class AdaIN_Basic : MonoBehaviour
         trial,
         woman_in_peasant_dress,
         woman_in_peasant_dress_cropped,
-        woman_with_hat_matisse
+        woman_with_hat_matisse,
+        aaaa,
+        icarus,
+        stella,
+        gogh,
+        matisse,
+        gogh2,
+        matisse2,
+        jahwa1,
+        jahwa2,
+        starry512,
+        moja,
+        gogh3,
+        starry512512,
+        cropstarry
     }
     public _Style_List updated_content = _Style_List.antimonocromatismo;
     public _Style_List updated_style = _Style_List.antimonocromatismo;
@@ -74,19 +88,28 @@ public class AdaIN_Basic : MonoBehaviour
         Check_Conditions();
     }
 
-    void Sentis_Execute()
-    {
+    void Sentis_Execute() {
         //Reset
         _InputTensors = new Dictionary<string, Tensor>();
-        //Resize
-        t_style = TextureConverter.ToTensor(_textures[(int)updated_style], 512, 512, 3);
-        t_content = TextureConverter.ToTensor(_textures[(int)updated_content], 512, 512, 3);
+
+        // 원본 해상도 그대로 텐서 생성
+        t_style = TextureConverter.ToTensor(_textures[(int)updated_style],
+            _textures[(int)updated_style].width,
+            _textures[(int)updated_style].height,
+            3);
+        t_content = TextureConverter.ToTensor(_textures[(int)updated_content],
+            _textures[(int)updated_content].width,
+            _textures[(int)updated_content].height,
+            3);
+
         //Add
         _InputTensors.Add("style", t_style);
         _InputTensors.Add("content", t_content);
+
         //Output
         TensorFloat t_output = _Engine.Execute(_InputTensors).PeekOutput() as TensorFloat;
         TextureConverter.RenderToTexture(t_output, _result);
+
         //Dispose
         t_style.Dispose();
         t_content.Dispose();
